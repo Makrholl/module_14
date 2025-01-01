@@ -12,7 +12,7 @@ from aiogram.types import (
 )
 
 # Токен вашего бота
-API_TOKEN = "7919928556:AAF2H4yzW5Zkxon3hLlOnHekOdrCYMXNGa0"
+API_TOKEN = "0000"
 
 # Инициализация бота и диспетчера
 bot = Bot(token=API_TOKEN)
