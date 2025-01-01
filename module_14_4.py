@@ -11,18 +11,14 @@ from aiogram.types import (
     Message, CallbackQuery, InputFile
 )
 
-# Токен вашего бота
 API_TOKEN = "0000"
 
-# Инициализация бота и диспетчера
 bot = Bot(token=API_TOKEN)
 dp = Dispatcher(storage=MemoryStorage())
 
-# Путь к базе данных
 DB_PATH = "database.db"
 
 
-# Функция инициализации базы данных
 def initiate_db(db_path=DB_PATH):
     connection = sqlite3.connect(db_path)
     cursor = connection.cursor()
@@ -38,15 +34,12 @@ def initiate_db(db_path=DB_PATH):
     connection.close()
 
 
-# Функция добавления данных в базу
 def seed_products(db_path=DB_PATH):
     connection = sqlite3.connect(db_path)
     cursor = connection.cursor()
 
-    # Проверяем, есть ли данные в таблице
     cursor.execute('SELECT COUNT(*) FROM Products')
     if cursor.fetchone()[0] == 0:
-        # Добавляем данные, если их нет
         products = [
             ("Product1", "Описание продукта 1", 100),
             ("Product2", "Описание продукта 2", 200),
@@ -58,7 +51,6 @@ def seed_products(db_path=DB_PATH):
     connection.close()
 
 
-# Получение всех продуктов из базы данных
 def get_all_products(db_path=DB_PATH):
     connection = sqlite3.connect(db_path)
     cursor = connection.cursor()
@@ -68,14 +60,12 @@ def get_all_products(db_path=DB_PATH):
     return products
 
 
-# Состояния для FSM
 class UserState(StatesGroup):
     age = State()
     growth = State()
     weight = State()
 
 
-# Основная клавиатура
 main_keyboard = ReplyKeyboardMarkup(
     keyboard=[
         [KeyboardButton(text='Рассчитать')],
@@ -117,17 +107,14 @@ async def get_buying_list(message: Message):
         await message.answer("Продукты отсутствуют.")
         return
 
-    # Создаем инлайн-клавиатуру для продуктов
     inline_keyboard = InlineKeyboardMarkup(inline_keyboard=[])
     for product in products:
         product_id, title, description, price = product
 
-        # Отправляем информацию о продукте
         await message.answer(
             f"Название: {title}\nОписание: {description}\nЦена: {price} рублей."
         )
 
-        # Подключаем изображения
         image_path = os.path.join(
             "/Users/makar/Documents/1Програмирование/Homework1/Files",
             f"{title.lower()}.jpg"
@@ -137,7 +124,6 @@ async def get_buying_list(message: Message):
         else:
             await message.answer("Изображение недоступно.")
 
-        # Добавляем кнопку для покупки
         inline_keyboard.inline_keyboard.append([
             InlineKeyboardButton(text=f"Купить {title}", callback_data=f"buy_{product_id}")
         ])
